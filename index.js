@@ -1,14 +1,15 @@
-var Transformer = require("babel-core").Transformer;
-var t           = require("babel-core").types;
+module.exports = function (babel) {
+  var t = babel.types;
+  
+  return new babel.Transformer("plugin-example", {
+    FunctionDeclaration: function (node, parent) {
+      var id = node.id;
+      node.type = "FunctionExpression";
+      node.id   = null;
 
-module.exports = new Transformer("plugin-example", {
-  FunctionDeclaration: function (node, parent) {
-    var id = node.id;
-    node.type = "FunctionExpression";
-    node.id   = null;
-
-    return t.variableDeclaration("var", [
-      t.variableDeclarator(id, node)
-    ]);
-  }
-});
+      return t.variableDeclaration("var", [
+        t.variableDeclarator(id, node)
+      ]);
+    }
+  });
+};
